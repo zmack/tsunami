@@ -25,7 +25,8 @@ Gem::Specification.new do |s|
      "VERSION",
      "lib/tsunami.rb",
      "test/helper.rb",
-     "test/test_tsunami.rb"
+     "test/test_tsunami.rb",
+     "tsunami.gemspec"
   ]
   s.homepage = %q{http://github.com/zmack/tsunami}
   s.rdoc_options = ["--charset=UTF-8"]
