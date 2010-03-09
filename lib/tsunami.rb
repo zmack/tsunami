@@ -5,41 +5,41 @@ require 'narray'
 
 class Tsunami
 
-  attr_accessor :size, :width, :height
-  attr_accessor :audio_file, :image_file
-  attr_accessor :bitrate
-  attr_accessor :offset
-
-  def initialize size, audio_file, image_file
+  def initialize audio_file, image_file
     # graph parameters
-    @size = size
-    @width = (@size).to_i
-    @height = 130
     @bitrate = '500'
     @offset = 5
     @audio_file = audio_file
     @image_file = image_file
-    #testing_parameters
   end
 
-  def create_waveform_image
-    buckets = fill_buckets width,@audio_file
-    p buckets
-    p size
-    gc = build_graph buckets,size
+  def create_waveform_image(width, height)
+    @size = width
+    @width = width
+    @height = height
+
+    buckets = fill_buckets
+
+    gc = build_graph buckets
+
     #create new image canvas
-    canvas = Magick::Image.new(@width + 20, @height) { self.background_color = 'transparent' }
+    canvas = Magick::Image.new(@width + 2*@offset, @height) { self.background_color = 'transparent' }
+
     # canvas = Magick::ImageList.new('images/waveform.png')
     gc.draw(canvas)
+
     canvas.write(@image_file)
   end
 
   #fill the buckets
-  def fill_buckets width,file
-    buckets = NArray.int(width,2)
+  def fill_buckets
+    buckets = NArray.int(@width,2)
+
     #let sox fetch the byte array
-    bytes = sox_get_bytes file
-    bucket_size = (((bytes.size-1).to_f / width)+0.5).to_i + 1
+    bytes = wave_bytes
+
+    bucket_size = (((bytes.size-1).to_f / @width)+0.5).to_i + 1
+
     (0..bytes.total-1).each do |i|
       value = bytes[i]
       index = i/bucket_size
@@ -56,14 +56,19 @@ class Tsunami
       #positive total
       #buckets[index,5] += value if value > 0
     end
+
     return buckets
   end
 
+  def wave_bytes
+    @wave_bytes ||= sox_get_bytes
+  end
+
   #open file with sox and return a byte array with sweet waveform information in it
-  def sox_get_bytes file, channels = 1
+  def sox_get_bytes channels = 1
     x=nil
     # read a 16 bit linear raw PCM file
-    sox_command = [ 'sox', file, '-t', 'raw', '-r', @bitrate, '-c', channels.to_s, '-s', '-L', '-' ]
+    sox_command = [ 'sox', @audio_file, '-t', 'raw', '-r', @bitrate, '-c', channels.to_s, '-s', '-L', '-' ]
     # we have to fork/exec to get a clean commandline
     IO.popen('-') { |p|
       if p.nil? then
@@ -81,11 +86,12 @@ class Tsunami
   end
 
   #build the waveform graph
-  def build_graph buckets,size
+  def build_graph buckets
     gc = Magick::Draw.new
+
     scale = 32768/@height*2.75
     midpoint = @height/2
-    p buckets.size
+
     (0..(buckets.size/2)-1).each do |i|
       low = buckets[i,0]
       high = buckets[i,1]
@@ -94,8 +100,8 @@ class Tsunami
       low_point = midpoint+low/scale
       high_point = midpoint+high/scale
       gc.line(i+@offset, low_point.to_i, i+@offset, high_point.to_i)
-      puts "#{i+@offset}, #{low_point.to_i}, #{i+@offset}, #{high_point.to_i}"
     end
+
     return gc
   end
 end
