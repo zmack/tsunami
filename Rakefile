@@ -5,11 +5,13 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "tsunami"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{It draws waveforms.}
+    gem.description = %Q{For reals, it draws waveforms, man}
     gem.email = "zmaxor@gmail.com"
     gem.homepage = "http://github.com/zmack/tsunami"
     gem.authors = ["Andrei Bocan"]
+    gem.add_dependency "rmagick", ">= 0"
+    gem.add_dependency "narray", ">= 0"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
