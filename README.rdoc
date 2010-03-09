@@ -1,6 +1,6 @@
 = tsunami
 
-Description goes here.
+Horrible, just horrible =(
 
 == Note on Patches/Pull Requests
  
