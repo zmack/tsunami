@@ -19,3 +19,6 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
+lib/*.mp3
+lib/*.png
+lib/test.rb
