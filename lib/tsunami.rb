@@ -5,18 +5,16 @@ require 'narray'
 
 class Tsunami
 
-  def initialize audio_file, image_file
+  def initialize audio_file
     # graph parameters
     @bitrate = '500'
     @offset = 5
     @audio_file = audio_file
-    @image_file = image_file
   end
 
-  def create_waveform_image(width, height)
-    @size = width
-    @width = width
-    @height = height
+  def create_waveform(image_file, options)
+    @width = options[:width].to_i || 100
+    @height = options[:height].to_i || 50
 
     buckets = fill_buckets
 
@@ -28,7 +26,7 @@ class Tsunami
     # canvas = Magick::ImageList.new('images/waveform.png')
     gc.draw(canvas)
 
-    canvas.write(@image_file)
+    canvas.write(image_file)
   end
 
   #fill the buckets
