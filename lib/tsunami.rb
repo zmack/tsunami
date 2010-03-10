@@ -25,6 +25,7 @@ class Tsunami
   end
 
   def fill_buckets
+    @audio_file.seek(0,0)
     frames = @audio_file.read_float(@audio_file.frames).channel(0)
     buckets = []
     frame_index = 0
