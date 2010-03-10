@@ -20,5 +20,7 @@ pkg
 
 ## PROJECT::SPECIFIC
 lib/*.mp3
+lib/*.wav
+lib/*.ogg
 lib/*.png
 lib/test.rb
