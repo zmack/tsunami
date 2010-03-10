@@ -41,7 +41,7 @@ class Tsunami
       frame_index += 1
     end
 
-    return buckets
+    return buckets[0, @width]
   end
 
   def build_graph buckets
