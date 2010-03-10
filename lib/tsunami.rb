@@ -9,7 +9,7 @@ class Tsunami
     @audio_file = Audio::Soundfile.new audio_file
   end
 
-  def create_waveform(image_file, options)
+  def create_waveform(image_file, options = {})
     @width = options[:width] || 100
     @height = options[:height] || 50
 
