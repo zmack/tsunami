@@ -1,12 +1,13 @@
 #this class was inspired by rjp's awesome http://github.com/rjp/cdcover
 require 'rubygems'
 require 'RMagick'
-require 'audio/sndfile'
+require 'ruby-audio'
+require 'buffer_ext.rb'
 
 class Tsunami
 
   def initialize audio_file
-    @audio_file = Audio::Soundfile.new audio_file
+    @audio_file = RubyAudio::Sound.new audio_file
   end
 
   def create_waveform(image_file, options = {})
@@ -26,12 +27,18 @@ class Tsunami
 
   def fill_buckets
     @audio_file.seek(0,0)
-    frames = @audio_file.read_float(@audio_file.frames).channel(0)
+    frames = @audio_file.read("float", @audio_file.info.frames)
     buckets = []
     frame_index = 0
-    frames_per_pixel = frames.length / @width
+    frames_per_pixel = frames.size / @width
 
-    frames.each do |frame|
+    frames.each do |channel_frames|
+      if @audio_file.info.channels > 1
+        frame = channel_frames[0]
+      else
+        frame = channel_frames
+      end
+
       index = frame_index / frames_per_pixel
       buckets[index] ||= { :max => -1, :min => 1 }
 
