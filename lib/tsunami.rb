@@ -3,6 +3,7 @@ require 'rubygems'
 require 'RMagick'
 require 'ruby-audio'
 require 'buffer_ext.rb'
+require 'tsunami/bucket'
 
 class Tsunami
 
@@ -11,26 +12,49 @@ class Tsunami
   end
 
   def create_waveform(image_file, options = {})
-    @width = options[:width] || 100
-    @height = options[:height] || 50
+    dimensions = {
+      :width => options[:width] || 100,
+      :height => options[:height] || 50
+    }
 
-    buckets = fill_buckets
+    versions = {
+      image_file => dimensions
+    }
 
-    gc = build_graph buckets
+    create_waveforms(versions)
+  end
 
-    canvas = Magick::Image.new(@width, @height) { self.background_color = 'transparent' }
+  def create_waveforms(versions)
+    create_buckets versions
+    fill_buckets
+
+    @buckets.each do |key, bucket|
+      canvas = draw_waveform_from_bucket(bucket)
+      canvas.write(key.to_s)
+    end
+  end
+
+  def draw_waveform_from_bucket(bucket)
+    gc = build_graph bucket
+
+    canvas = Magick::Image.new(bucket.width, bucket.height) { self.background_color = 'transparent' }
 
     gc.draw(canvas)
 
-    canvas.write(image_file)
+    canvas
+  end
+
+  def create_buckets(versions)
+    @buckets = {}
+    versions.each_key do |key|
+      @buckets[key] = Bucket.new(total_frames, versions[key][:width], versions[key][:height])
+    end
   end
 
   def fill_buckets
     @audio_file.seek(0,0)
-    frames = @audio_file.read("float", @audio_file.info.frames)
-    buckets = []
+    frames = @audio_file.read("float", total_frames)
     frame_index = 0
-    frames_per_pixel = frames.size / @width
 
     frames.each do |channel_frames|
       if @audio_file.info.channels > 1
@@ -39,29 +63,22 @@ class Tsunami
         frame = channel_frames
       end
 
-      index = frame_index / frames_per_pixel
-      buckets[index] ||= { :max => -1, :min => 1 }
-
-      buckets[index][:min] = frame if frame < buckets[index][:min]
-
-      buckets[index][:max] = frame if frame > buckets[index][:max]
+      @buckets.values.each { |b| b.set(frame_index, frame) }
 
       frame_index += 1
     end
-
-    return buckets[0, @width]
   end
 
-  def build_graph buckets
+  def build_graph bucket
     gc = Magick::Draw.new
     gc.stroke('red')
     gc.stroke_width(1)
 
-    mid = @height/2
+    mid = bucket.height / 2
 
-    buckets.each_with_index do |bucket, i|
-      low = bucket[:min]
-      high = bucket[:max]
+    bucket.each_value_with_index do |values, i|
+      low = values[:min]
+      high = values[:max]
 
       low_point = mid * ( 1 - low )
       high_point = mid * ( 1 - high )
@@ -71,4 +88,9 @@ class Tsunami
 
     return gc
   end
+
+  def total_frames
+    @total_frames ||= @audio_file.info.frames
+  end
+
 end
