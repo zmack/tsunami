@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tsunami}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andrei Bocan"]
-  s.date = %q{2010-03-25}
+  s.date = %q{2010-04-19}
   s.description = %q{For reals, it draws waveforms, man}
   s.email = %q{zmaxor@gmail.com}
   s.extra_rdoc_files = [
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
      "VERSION",
      "lib/buffer_ext.rb",
      "lib/tsunami.rb",
+     "lib/tsunami/bucket.rb",
      "test/helper.rb",
      "test/test_tsunami.rb",
      "tsunami.gemspec"
@@ -32,7 +33,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/zmack/tsunami}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{It draws waveforms.}
   s.test_files = [
     "test/helper.rb",
