@@ -17,9 +17,11 @@ class Tsunami
     end
 
     def set(frame, value)
-      values(frame)[:min] = value if value < values(frame)[:min]
+      frame_values = values(frame)
 
-      values(frame)[:max] = value if value > values(frame)[:max]
+      frame_values[:min] = value if value < frame_values[:min]
+
+      frame_values[:max] = value if value > frame_values[:max]
     end
 
     def frames_per_pixel
