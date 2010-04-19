@@ -28,6 +28,7 @@ class Tsunami
     create_buckets versions
     fill_buckets
 
+    # TODO: port this whole piece of shit to C =[
     @buckets.each do |key, bucket|
       canvas = draw_waveform_from_bucket(bucket)
       canvas.write(key.to_s)
