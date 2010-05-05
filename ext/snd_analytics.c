@@ -43,5 +43,6 @@ TsunamiRange *get_stats(char *path, short sample_count) {
   }
 
   free(buffer);
+  sf_close(file);
   return samples;
 }
