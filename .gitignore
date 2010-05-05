@@ -19,8 +19,13 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
+*.log
 lib/*.mp3
 lib/*.wav
 lib/*.ogg
 lib/*.png
 lib/test.rb
+ext/*.wav
+ext/test.rb
+ext/*.o
+ext/*.bundle
