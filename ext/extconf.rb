@@ -1,6 +1,5 @@
 require 'mkmf'
 
-puts `pkg-config --cflags sndfile`
 $CFLAGS = `pkg-config --cflags sndfile`.chop
 $LDFLAGS = `pkg-config --libs sndfile`.chop
 
