@@ -29,3 +29,4 @@ ext/*.wav
 ext/test.rb
 ext/*.o
 ext/*.bundle
+ext/Makefile
