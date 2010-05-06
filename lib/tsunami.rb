@@ -1,5 +1,3 @@
-#this class was inspired by rjp's awesome http://github.com/rjp/cdcover
-require 'rubygems'
 require 'RMagick'
 require 'ruby-audio'
 require 'buffer_ext.rb'
