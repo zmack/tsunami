@@ -9,9 +9,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Andrei Bocan"]
-  s.date = %q{2010-04-19}
+  s.date = %q{2010-05-06}
   s.description = %q{For reals, it draws waveforms, man}
   s.email = %q{zmaxor@gmail.com}
+  s.extensions = ["ext/extconf.rb"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
@@ -23,6 +24,11 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "ext/Makefile",
+     "ext/extconf.rb",
+     "ext/snd_analytics.c",
+     "ext/snd_analytics.h",
+     "ext/tsunami_ext.c",
      "lib/buffer_ext.rb",
      "lib/tsunami.rb",
      "lib/tsunami/bucket.rb",

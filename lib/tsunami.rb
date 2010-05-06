@@ -3,6 +3,7 @@ require 'rubygems'
 require 'RMagick'
 require 'ruby-audio'
 require 'buffer_ext.rb'
+require 'tsunami_ext'
 require 'tsunami/bucket'
 
 class Tsunami
